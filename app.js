@@ -1,7 +1,7 @@
 const API = require("./lib/API");
 const readlineSync = require("readline-sync");
 
-function averageRating(book) {
+function calculateAverageRating(book) {
   let total = 0;
   for (const review of book.reviews) {
     total += parseInt(review.rating);
@@ -9,11 +9,12 @@ function averageRating(book) {
   return total / book.reviews.length;
 }
 
-function displayBooks(books) {
+function displayBooksSummary(books) {
   for (const book of books) {
+    // if ths book has some reviews
     if (book.reviews.length > 0) {
       console.log(
-        `--- ${book.id}: ${book.title}, rating: ${averageRating(book)}`
+        `--- ${book.id}: ${book.title}, rating: ${calculateAverageRating(book)}`
       );
     } else {
       console.log(`--- ${book.id}: ${book.title}, no reviews yet!`);
@@ -21,7 +22,7 @@ function displayBooks(books) {
   }
 }
 
-function displayBook(book) {
+function displayBookDetails(book) {
   console.log(`-- ${book.title} --`);
   for (const review of book.reviews) {
     console.log(`${review.content} - Rating: ${review.rating}`);
@@ -29,13 +30,19 @@ function displayBook(book) {
 }
 
 function chooseABook(books) {
+  // display each ID and title
   for (const book of books) {
     console.log(`--- ${book.id}: ${book.title}`);
   }
+
+  // user inputs an ID number
   const bookChoice = readlineSync.question(
-    "Which book would you like to review? "
+    "Which number book would you like to review? "
   );
   const book = API.read("books", bookChoice);
+
+  // if the API can't find that book
+  // run chooseABook again
   if (book !== undefined) {
     return book;
   } else {
@@ -55,12 +62,15 @@ function mainMenu() {
   const choice = readlineSync.question("Please choose an option ");
 
   if (choice === "1") {
-    console.log("----------------");
+    console.log("-----------------");
     console.log("- ALL OUR BOOKS -");
-    console.log("----------------");
+    console.log("-----------------");
 
+    // get all books
     const books = API.read("books");
-    displayBooks(books);
+    displayBooksSummary(books);
+
+    // return to main menu
     mainMenu();
   } else if (choice === "2") {
     console.log("-----------------");
@@ -69,20 +79,26 @@ function mainMenu() {
 
     const books = API.read("books");
     const book = chooseABook(books);
-    displayBook(book);
+    displayBookDetails(book);
+
+    // Input review details
     const rating = readlineSync.question("What is your rating? ");
     const content = readlineSync.question("Please write your review ");
+
+    // add the new review to the book reviews
     book.reviews.push({
       rating: rating,
       content: content
     });
 
+    // update the book in the API
     API.update("books", book);
 
-    console.log("----------------");
+    console.log("----------------------------");
     console.log("Thanks for leaving a review!");
-    console.log("----------------");
+    console.log("----------------------------");
 
+    // return to main manu
     mainMenu();
   } else {
     console.log("Sorry we didn't recognise that choice!");
