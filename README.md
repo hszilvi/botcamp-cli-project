@@ -4,13 +4,13 @@ This is an example of a simple command line interface (CLI), written in Javascri
 
 ## Run the demo
 
-Run `npm install` then `npm start` to try the CLI.
+Run `npm install` then `npm run demo` to try the demo CLI.
 
 ## How it works
 
-`app.js` loads up an API library which is used to read and write the JSON file `lib/db.json`.
+`app.js` loads up an API library which is used to read and write a JSON file.
 
-In this example, the API has only 1 resource: "books".
+In the demo, the API has only 1 resource: "books".
 
 The CLI is displayed to the user using lots of `console.log`s.
 
@@ -40,8 +40,13 @@ Some possible data structures for the above suggested topics can be found [here]
 
 ### 4: Build your app
 
-Open `app.js`, remove all except the first 2 lines of code and start building your CLI!
-
-More realistically, you might want to keep a copy of the current version of `app.js` so you can refer back to it. You could rename it to `app.old.js`.
+Open `app.js` and start building your CLI!
 
 Go [here](./API_documentation.md) to read about how to use the API.
+
+## Requirements
+
+1. All 4 CRUD actions for 1 resource (e.g. `books` or `posts`)
+2. Main Menu which lists avaiable options
+3. Return to main menu after completing actions
+4. Handling unknown options
